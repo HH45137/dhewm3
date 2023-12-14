@@ -17,6 +17,10 @@ project(dhewm3)
 # LIBC_MALLOC		-DUSE_LIBC_MALLOC=0
 # ID_NOLANADDRESS	-DID_NOLANADDRESS
 
+# Final game bin files output path
+find_path(bin_output_path "D:/dhewm3")
+SET(EXECUTABLE_OUTPUT_PATH ${bin_output_path}/)
+
 # fallback for cmake versions without add_compile_options
 if(NOT COMMAND add_compile_options)
 	function(add_compile_options)
@@ -1225,6 +1229,7 @@ if(BASE AND NOT HARDLINK_GAME)
 	target_include_directories(base PRIVATE "${CMAKE_SOURCE_DIR}/game")
 	set_target_properties(base PROPERTIES LINK_FLAGS "${ldflags}")
 	set_target_properties(base PROPERTIES INSTALL_NAME_DIR "@executable_path")
+	SET_TARGET_PROPERTIES(base PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${bin_output_path}/)
 	if (AROS)
 		target_link_libraries(base idlib dll)
 	else()
@@ -1253,6 +1258,7 @@ if(D3XP AND NOT HARDLINK_GAME)
 	target_include_directories(d3xp PRIVATE "${CMAKE_SOURCE_DIR}/d3xp")
 	set_target_properties(d3xp PROPERTIES LINK_FLAGS "${ldflags}")
 	set_target_properties(d3xp PROPERTIES INSTALL_NAME_DIR "@executable_path")
+	SET_TARGET_PROPERTIES(d3xp PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${bin_output_path}/)
 	if (AROS)
 		target_link_libraries(d3xp idlib dll)
 	else()
