@@ -530,6 +530,7 @@ set(src_renderer
 	renderer/tr_trace.cpp
 	renderer/tr_trisurf.cpp
 	renderer/tr_turboshadow.cpp
+	renderer/idRenderSystemLocalGL4.cpp
 )
 
 # I'm a bit sloppy with headers and just glob them in..
