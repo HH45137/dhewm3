@@ -1,5 +1,8 @@
 #include "tr_local.h"
 
+void initGL4() {
+
+}
 
 idRenderSystemLocalGL4::idRenderSystemLocalGL4(void)
 {
@@ -67,6 +70,18 @@ void idRenderSystemLocalGL4::Shutdown(void)
 
 void idRenderSystemLocalGL4::InitOpenGL(void)
 {
+	if (!glConfig.isInitialized) {
+		int err;
+
+		initGL4();
+		
+		globalImages->ReloadAllImages();
+
+		err = glGetError();
+		if (err != GL_NO_ERROR) {
+			common->Printf("glGetError() = 0x%x\n", err);
+		}
+	}
 }
 
 void idRenderSystemLocalGL4::ShutdownOpenGL(void)
