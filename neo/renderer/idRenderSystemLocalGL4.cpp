@@ -3,7 +3,7 @@
 
 idRenderSystemLocalGL4::idRenderSystemLocalGL4(void)
 {
-
+	Clear();
 }
 
 idRenderSystemLocalGL4::~idRenderSystemLocalGL4(void)
@@ -13,6 +13,39 @@ idRenderSystemLocalGL4::~idRenderSystemLocalGL4(void)
 
 void idRenderSystemLocalGL4::Clear(void)
 {
+	registered = false;
+	frameCount = 0;
+	viewCount = 0;
+	staticAllocCount = 0;
+	frameShaderTime = 0.0f;
+	viewportOffset[0] = 0;
+	viewportOffset[1] = 0;
+	tiledViewport[0] = 0;
+	tiledViewport[1] = 0;
+	backEndRenderer = BE_BAD;
+	backEndRendererHasVertexPrograms = false;
+	backEndRendererMaxLight = 1.0f;
+	ambientLightVector.Zero();
+	sortOffset = 0;
+	worlds.Clear();
+	primaryWorld = NULL;
+	memset(&primaryRenderView, 0, sizeof(primaryRenderView));
+	primaryView = NULL;
+	defaultMaterial = NULL;
+	testImage = NULL;
+	ambientCubeImage = NULL;
+	viewDef = NULL;
+	memset(&pc, 0, sizeof(pc));
+	memset(&lockSurfacesCmd, 0, sizeof(lockSurfacesCmd));
+	memset(&identitySpace, 0, sizeof(identitySpace));
+	stencilIncr = 0;
+	stencilDecr = 0;
+	memset(renderCrops, 0, sizeof(renderCrops));
+	currentRenderCrop = 0;
+	guiRecursionLevel = 0;
+	guiModel = NULL;
+	demoGuiModel = NULL;
+	takingScreenshot = false;
 }
 
 void idRenderSystemLocalGL4::SetBackEndRenderer()
