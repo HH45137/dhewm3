@@ -1,3 +1,4 @@
+#include "glad/glad.h"
 #include "tr_local.h"
 
 void initGL4() {

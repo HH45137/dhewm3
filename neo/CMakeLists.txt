@@ -21,6 +21,11 @@ project(dhewm3)
 find_path(bin_output_path "D:/dhewm3")
 SET(EXECUTABLE_OUTPUT_PATH ${bin_output_path}/)
 
+# Use OpenGL4
+find_package(OpenGL REQUIRED)
+include_directories(${OPENGL_INCLUDE_DIR})
+include_directories(thirdpart/include)
+
 # fallback for cmake versions without add_compile_options
 if(NOT COMMAND add_compile_options)
 	function(add_compile_options)
@@ -531,6 +536,7 @@ set(src_renderer
 	renderer/tr_trisurf.cpp
 	renderer/tr_turboshadow.cpp
 	renderer/idRenderSystemLocalGL4.cpp
+	thirdpart/src/glad.c
 )
 
 # I'm a bit sloppy with headers and just glob them in..
