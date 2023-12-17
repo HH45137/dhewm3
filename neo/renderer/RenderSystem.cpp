@@ -39,7 +39,8 @@ If you have questions concerning this license or the applicable additional terms
 #include "renderer/tr_local.h"
 
 idRenderSystemLocal	tr;
-idRenderSystem	*renderSystem = &tr;
+idRenderSystemLocalGL4 tr_gl4;
+idRenderSystem	*renderSystem = &tr_gl4;
 
 
 /*
