@@ -1,4 +1,4 @@
-#include "glad/glad.h"
+//#include "glad/glad.h"
 #include "tr_local.h"
 
 void initGL4() {
@@ -77,11 +77,6 @@ void idRenderSystemLocalGL4::InitOpenGL(void)
 		initGL4();
 		
 		globalImages->ReloadAllImages();
-
-		err = glGetError();
-		if (err != GL_NO_ERROR) {
-			common->Printf("glGetError() = 0x%x\n", err);
-		}
 	}
 }
 

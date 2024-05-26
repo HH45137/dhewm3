@@ -40,8 +40,12 @@ If you have questions concerning this license or the applicable additional terms
 
 idRenderSystemLocal	tr;
 idRenderSystemLocalGL4 tr_gl4;
-idRenderSystem	*renderSystem = &tr_gl4;
 
+#ifdef GL4_RENDERER
+idRenderSystem	*renderSystem = &tr_gl4;
+#else
+idRenderSystem  *renderSystem = &tr;
+#endif
 
 /*
 =====================

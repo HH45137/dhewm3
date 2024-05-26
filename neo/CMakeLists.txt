@@ -18,13 +18,18 @@ project(dhewm3)
 # ID_NOLANADDRESS	-DID_NOLANADDRESS
 
 # Final game bin files output path
-find_path(bin_output_path "D:/dhewm3")
-SET(EXECUTABLE_OUTPUT_PATH ${bin_output_path}/)
+SET(EXECUTABLE_OUTPUT_PATH "D:/dhewm3")
+
+# Clion run
+# If current platform is Windows
+if (CMAKE_SYSTEM_NAME MATCHES "Windows")
+	set(CMAKE_EXE_LINKER_FLAGS "-static")
+endif ()
 
 # Use OpenGL4
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
-include_directories(thirdpart/include)
+include_directories(thirdpart/glad/include/)
 
 # fallback for cmake versions without add_compile_options
 if(NOT COMMAND add_compile_options)
@@ -67,7 +72,7 @@ option(ONATIVE		"Optimize for the host CPU" OFF)
 option(SDL2			"Use SDL2 instead of SDL1.2" ON)
 option(REPRODUCIBLE_BUILD "Replace __DATE__ and __TIME__ by hardcoded values for reproducible builds" OFF)
 
-option(HARDLINK_GAME "Compile gamecode into executable (no game DLLs)" OFF)
+option(HARDLINK_GAME "Compile gamecode into executable (no game DLLs)" ON)
 
 if(NOT MSVC) # GCC/clang or compatible, hopefully
 	option(FORCE_COLORED_OUTPUT "Always produce ANSI-colored compiler warnings/errors (GCC/Clang only; esp. useful with ninja)." OFF)
@@ -209,7 +214,7 @@ if (SDL2)
 	if(APPLE OR WIN32)
 		set(SDL2_BUILDING_LIBRARY TRUE)
 	endif()
-	find_package(SDL2 REQUIRED)
+	find_package(SDL2 CONFIG REQUIRED)
 	include_directories(${SDL2_INCLUDE_DIR})
 	set(SDLx_LIBRARY ${SDL2_LIBRARY})
 else()
@@ -546,7 +551,7 @@ set(src_renderer
 	renderer/tr_trisurf.cpp
 	renderer/tr_turboshadow.cpp
 	renderer/idRenderSystemLocalGL4.cpp
-	thirdpart/src/glad.c
+	thirdpart/glad/src/glad.c
 )
 
 # I'm a bit sloppy with headers and just glob them in..
@@ -1185,6 +1190,8 @@ endif()
 		${ZLIB_LIBRARY}
 		${SDLx_LIBRARY}
 		${sys_libs}
+#		$<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+		$<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
 	)
 
 	if(NOT APPLE AND NOT WIN32)
@@ -1220,6 +1227,8 @@ endif()
 		${ZLIB_LIBRARY}
 		${SDLx_LIBRARY}
 		${sys_libs}
+#		$<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+		$<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
 	)
 
 	if(NOT APPLE AND NOT WIN32)
