@@ -650,6 +650,17 @@ set(src_renderer
 	renderer/tr_turboshadow.cpp
 
 	renderer/stblib_impls.c
+
+	renderer/rhi/idRHI.h
+	renderer/rhi/idRHIBuffer.h
+	renderer/rhi/idRHICommandList.h
+	renderer/rhi/idRHIDescriptor.h
+	renderer/rhi/idRHIDevice.h
+	renderer/rhi/idRHIPipeline.h
+	renderer/rhi/idRHIResourcePool.h
+	renderer/rhi/idRHIShader.h
+	renderer/rhi/idRHISwapChain.h
+	renderer/rhi/idRHISync.h
 )
 
 always_optimize_sourcefile(renderer/stblib_impls.c)

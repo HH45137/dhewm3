@@ -535,6 +535,10 @@ void idRenderSystemLocal::SetBackEndRenderer() {
 		}
 	}
 
+	if ( idStr::Icmp( r_renderer.GetString(), "rhi" ) == 0 ) {
+		backEndRenderer = BE_RHI;
+	}
+
 	// fallback
 	if ( backEndRenderer == BE_BAD ) {
 		// choose the best
@@ -549,6 +553,11 @@ void idRenderSystemLocal::SetBackEndRenderer() {
 	switch( backEndRenderer ) {
 	case BE_ARB2:
 		common->Printf( "using ARB2 renderSystem\n" );
+		backEndRendererHasVertexPrograms = true;
+		backEndRendererMaxLight = 999;
+		break;
+	case BE_RHI:
+		common->Printf( "using RHI renderSystem\n" );
 		backEndRendererHasVertexPrograms = true;
 		backEndRendererMaxLight = 999;
 		break;
