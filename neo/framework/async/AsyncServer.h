@@ -208,8 +208,8 @@ private:
 	int					lastAuthTime;				// global for auth server timeout
 
 	// track the max outgoing rate over the last few secs to watch for spikes
-	// dependent on net_serverSnapshotDelay. 50ms, for a 3 seconds backlog -> 60 samples
-	static const int	stats_numsamples = 60;
+	// dependent on net_serverSnapshotDelay. 50ms, for a 3 seconds backlog -> USERCMD_HZ samples
+	static const int	stats_numsamples = USERCMD_MSEC_INT;
 	int					stats_outrate[ stats_numsamples ];
 	int					stats_current;
 	int					stats_average_sum;

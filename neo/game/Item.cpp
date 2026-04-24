@@ -1043,7 +1043,7 @@ idEntity *idMoveableItem::DropItem( const char *classname, const idVec3 &origin,
 			item->PostEventMS( &EV_Activate, activateDelay, item );
 		}
 		if ( !removeDelay ) {
-			removeDelay = 5 * 60 * 1000;
+			removeDelay = 5 * USERCMD_HZ * 1000;
 		}
 		// always remove a dropped item after 5 minutes in case it dropped to an unreachable location
 		item->PostEventMS( &EV_Remove, removeDelay );

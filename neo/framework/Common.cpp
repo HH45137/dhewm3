@@ -114,11 +114,14 @@ idCVar com_dbgServerAdr( "com_dbgServerAdr", "localhost", CVAR_SYSTEM | CVAR_ARC
 
 idCVar com_product_lang_ext( "com_product_lang_ext", "1", CVAR_INTEGER | CVAR_SYSTEM | CVAR_ARCHIVE, "Extension to use when creating language files." );
 
-// in the high-fps branch, the next three values will be set based on com_gameHz
-// here (in the old 60fps-only code) they're const and just to reduce difference to the other branch
-//const int    com_gameHzVal = 60;
-//const int    com_gameFrameLengthMS = 16; // length of one frame in msec, 1000 / com_gameHz
-const double  com_preciseFrameLengthMS = 1000.0 / 60.0;
+// game tick frequency (Hz). Higher values give smoother gameplay at high framerates.
+// Must be a divisor of 1000. Default 120 for high-fps support, can be set to 60 for classic.
+idCVar com_gameHz( "com_gameHz", "120", CVAR_INTEGER | CVAR_SYSTEM | CVAR_NOCHEAT,
+                   "game tick frequency in Hz (must be divisor of 1000)", 60, 240 );
+
+// DG: com_preciseFrameLengthMS now computed from com_gameHz to support high-fps
+// (previously hardcoded to 1000.0/60.0)
+double com_preciseFrameLengthMS = USERCMD_MSEC; // default 120Hz, updated in Init()
 
 double com_preciseFrameTimeMS = 0; // like com_frameTime but as double: time (since start) for the current frame in milliseconds
 
@@ -130,7 +133,7 @@ int				time_backend;			// renderSystem backend time
 
 int				com_frameTime;			// time (since start) for the current frame in milliseconds
 int				com_frameNumber;		// variable frame number
-volatile int	com_ticNumber;			// 60 hz tics
+volatile int	com_ticNumber;			// game Hz tics (com_gameHz times per second)
 int				com_editors;			// currently opened editor(s)
 bool			com_editorActive;		//  true if an editor has focus
 
@@ -273,12 +276,9 @@ void Com_UpdateTicNumber() {
 			nextTicTime = now + com_preciseFrameLengthMS;
 			com_ticNumber = 1;
 		} else {
-			// usually numTics should be 1, except if timeDiff > 16.6667 (skipped a frame?)
-			// should be `1 + timediff / com_preciseFrameLengthMS`
-			// <=> 1 + timediff / (1000.0 / USERCMD_HZ) // 1000ms in one second
-			// <=> 1 + timediff * (USERCMD_HZ / 1000.0) // USERCMD_HZ = 60;
-			// <=> 1 + timediff * 0.06;
-			int numTics = 1 + timeDiff * 0.06;
+			// calculate number of tics based on actual elapsed time and current frame length
+			// numTics = 1 + timediff / com_preciseFrameLengthMS
+			int numTics = 1 + (int)(timeDiff / com_preciseFrameLengthMS);
 			com_ticNumber += numTics;
 
 			// the number of msec per tic can be varied with the timescale cvar
@@ -2560,9 +2560,11 @@ void idCommonLocal::Frame( void ) {
 		if ( com_editors == 0 )
 #endif
 		{
+			// DG: replaced hardcoded 60.0f with com_gameHz for high-fps support
+			float displayHz = GLimp_GetDisplayRefresh();
 			if ( com_timescale.GetFloat() == 1.0f && GLimp_GetSwapInterval() != 0
-				&& fabsf(60.0f - GLimp_GetDisplayRefresh()) < 1.0f ) {
-				// if we're using vsync and the display is running at about 60Hz, start next tic
+				&& fabsf( (float)com_gameHz.GetInteger() - displayHz ) < 2.0f ) {
+				// if we're using vsync and the display is running at about gameHz, start next tic
 				// immediately so our internal tic time and vsync don't drift apart
 				double now = Sys_MillisecondsPrecise();
 				if ( nextTicTime > now ) {
@@ -2874,7 +2876,7 @@ int idCommonLocal::AsyncThread(void* arg)
 
 		// TODO: Should this be synchronized with the main thread somehow?
 		//       Might make sense to run this when game tics are done, while main thread is rendering?
-		//       For now I'll assume that just doing this 60 times per second works well enough...
+		//       For now I'll assume that just doing this at com_gameHz works well enough...
 		nextTicTargetMsec += com_preciseFrameLengthMS;
 		Sys_SleepUntilPrecise( nextTicTargetMsec );
 	}

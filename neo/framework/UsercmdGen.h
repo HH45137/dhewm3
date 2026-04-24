@@ -37,8 +37,12 @@ If you have questions concerning this license or the applicable additional terms
 ===============================================================================
 */
 
-const int USERCMD_HZ			= 60;			// 60 frames per second
-const int USERCMD_MSEC			= 1000 / USERCMD_HZ;
+// NOTE: USERCMD_HZ defines the "design frequency". The actual runtime
+// game tick frequency is controlled by com_gameHz cvar. Higher values
+// give smoother gameplay but require more CPU.
+const float USERCMD_HZ			= 120;
+const float USERCMD_MSEC		= 1000 / USERCMD_HZ;
+const int USERCMD_MSEC_INT		= static_cast<int>(1000 / USERCMD_HZ);
 
 // usercmd_t->button bits
 const int BUTTON_ATTACK			= BIT(0);

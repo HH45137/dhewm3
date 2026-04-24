@@ -366,7 +366,8 @@ void idTestModel::Think( void ) {
 		RunPhysics();
 
 		physicsObj.GetAngles( ang );
-		physicsObj.SetAngularExtrapolation( extrapolation_t(EXTRAPOLATION_LINEAR|EXTRAPOLATION_NOSTOP), gameLocal.time, 0, ang, idAngles( 0, g_testModelRotate.GetFloat() * 360.0f / 60.0f, 0 ), ang_zero );
+		// DG: use USERCMD_HZ instead of hardcoded 60 for high-fps support
+		physicsObj.SetAngularExtrapolation( extrapolation_t(EXTRAPOLATION_LINEAR|EXTRAPOLATION_NOSTOP), gameLocal.time, 0, ang, idAngles( 0, g_testModelRotate.GetFloat() * 360.0f / USERCMD_HZ, 0 ), ang_zero );
 
 		idClipModel *clip = physicsObj.GetClipModel();
 		if ( clip && animator.ModelDef() ) {

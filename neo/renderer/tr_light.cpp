@@ -235,8 +235,14 @@ void R_WobbleskyTexGen( drawSurf_t *surf, const idVec3 &viewOrg ) {
 	float	rotateSpeed = surf->shaderRegisters[ parms[2] ];
 
 	wobbleDegrees = wobbleDegrees * idMath::PI / 180;
-	wobbleSpeed = wobbleSpeed * 2 * idMath::PI / 60;
-	rotateSpeed = rotateSpeed * 2 * idMath::PI / 60;
+	// DG: use com_gameHz for framerate-independent wobble/rotation speed
+	// (was hardcoded to 60 for the old 60fps-only engine)
+	{
+		extern idCVar com_gameHz;
+		int gameHz = Max( 1, com_gameHz.GetInteger() );
+		wobbleSpeed = wobbleSpeed * 2 * idMath::PI / gameHz;
+		rotateSpeed = rotateSpeed * 2 * idMath::PI / gameHz;
+	}
 
 	// very ad-hoc "wobble" transform
 	float	transform[16];

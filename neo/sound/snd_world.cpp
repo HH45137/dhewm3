@@ -990,7 +990,9 @@ void idSoundWorldLocal::PlaceListener( const idVec3& origin, const idMat3& axis,
 	gameMsec = gameTime;
 	if ( fpa[0] ) {
 		// exactly 30 fps so the wave file can be used for exact video frames
-		game44kHz = idMath::FtoiFast( gameMsec * ( ( 1000.0f / 60.0f ) / 16.0f ) * 0.001f * 44100.0f );
+		// DG: use USERCMD_HZ instead of hardcoded 60 for high-fps support
+		// ((1000.0f / USERCMD_HZ) / 16.0f) gives a correction factor for precise frame timing
+		game44kHz = idMath::FtoiFast( gameMsec * ( ( 1000.0f / USERCMD_HZ ) / 16.0f ) * 0.001f * 44100.0f );
 	} else {
 		// the normal 16 msec / frame
 		game44kHz = idMath::FtoiFast( gameMsec * 0.001f * 44100.0f );

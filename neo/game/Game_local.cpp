@@ -94,7 +94,9 @@ idAnimManager				animationLib;
 idGameLocal					gameLocal;
 idGame *					game = &gameLocal;	// statically pointed at an idGameLocal
 
-const float idGameLocal::msecPrecise = 1000.0f/60.0f;
+// DG: msecPrecise is set based on com_gameHz cvar (default 120) for high-fps support.
+// Previously was USERCMD_MSEC (static const).
+float idGameLocal::msecPrecise = USERCMD_MSEC;
 
 const char *idGameLocal::sufaceTypeNames[ MAX_SURFACE_TYPES ] = {
 	"none",	"metal", "stone", "flesh", "wood", "cardboard", "liquid", "glass", "plastic",

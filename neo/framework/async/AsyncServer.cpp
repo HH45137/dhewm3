@@ -38,7 +38,7 @@ const int EMPTY_RESEND_TIME				= 500;
 const int PING_RESEND_TIME				= 500;
 const int NOINPUT_IDLE_TIME				= 30000;
 
-const int HEARTBEAT_MSEC				= 5*60*1000;
+const int HEARTBEAT_MSEC				= 5*USERCMD_HZ*1000;
 
 // must be kept in sync with authReplyMsg_t
 const char* authReplyMsg[] = {

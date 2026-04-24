@@ -280,7 +280,9 @@ public:
 	// DG: unlike msec, msecPrecise remains constant (in the base game, in d3xp it might be scaled for slowmo)
 	//     so it can be used when the correct time for multiple frames must be calculated,
 	//     or when setting an int-timer for next frame (where it rounds down which is safe for that case)
-	static const float		msecPrecise;			// 16.66666
+	// DG: changed from static const to static so it can be set by the engine
+	// based on the com_gameHz cvar for high-fps support
+	static float			msecPrecise;			// 1000/com_gameHz
 
 	int						vacuumAreaNum;			// -1 if level doesn't have any outside areas
 
