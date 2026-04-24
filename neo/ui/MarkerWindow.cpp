@@ -36,6 +36,8 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "ui/MarkerWindow.h"
 
+#include "framework/UsercmdGen.h"
+
 class idImage;
 void idMarkerWindow::CommonInit() {
 	numStats = 0;
@@ -101,7 +103,7 @@ const char *idMarkerWindow::HandleEvent(const sysEvent_t *event, bool *updateVis
 				currentMarker = i;
 				gui->SetStateInt( "currentMarker", md.time );
 				stopTime = md.time;
-				gui->GetDesktop()->SetChildWinVarVal("markerText", "text", va("Marker set at %.2i:%.2i", md.time / 60 / 60, (md.time / 60) % 60));
+				gui->GetDesktop()->SetChildWinVarVal("markerText", "text", va("Marker set at %.2i:%.2i", md.time / USERCMD_HZ / USERCMD_HZ, (md.time / USERCMD_HZ) % USERCMD_HZ));
 				gui->GetDesktop()->SetChildWinVarVal("markerText", "visible", "1");
 				gui->GetDesktop()->SetChildWinVarVal("markerBackground", "matcolor", "1 1 1 1");
 				gui->GetDesktop()->SetChildWinVarVal("markerBackground", "text", "");
@@ -114,7 +116,7 @@ const char *idMarkerWindow::HandleEvent(const sysEvent_t *event, bool *updateVis
 			currentMarker = -1;
 			gui->SetStateInt( "currentMarker", currentTime );
 			stopTime = currentTime;
-			gui->GetDesktop()->SetChildWinVarVal("markerText", "text", va("Marker set at %.2i:%.2i", currentTime / 60 / 60, (currentTime / 60) % 60));
+			gui->GetDesktop()->SetChildWinVarVal("markerText", "text", va("Marker set at %.2i:%.2i", currentTime / USERCMD_HZ / USERCMD_HZ, (currentTime / USERCMD_HZ) % USERCMD_HZ));
 			gui->GetDesktop()->SetChildWinVarVal("markerText", "visible", "1");
 			gui->GetDesktop()->SetChildWinVarVal("markerBackground", "matcolor", "0 0 0 0");
 			gui->GetDesktop()->SetChildWinVarVal("markerBackground", "text", "No Preview");
@@ -175,7 +177,7 @@ void idMarkerWindow::Draw(int time, float x, float y) {
 		r.y = gui->CursorY() - 15;
 		r.w = 40;
 		r.h = 20;
-		dc->DrawText(va("%.2i:%.2i", currentTime / 60 / 60, (currentTime / 60) % 60), 0.25, 0, idDeviceContext::colorWhite, r, false);
+		dc->DrawText(va("%.2i:%.2i", currentTime / USERCMD_HZ / USERCMD_HZ, (currentTime / USERCMD_HZ) % USERCMD_HZ), 0.25, 0, idDeviceContext::colorWhite, r, false);
 	}
 
 	if (stopTime >= 0 && markerStop) {

@@ -118,7 +118,7 @@ idCVar com_product_lang_ext( "com_product_lang_ext", "1", CVAR_INTEGER | CVAR_SY
 // here (in the old 60fps-only code) they're const and just to reduce difference to the other branch
 //const int    com_gameHzVal = 60;
 //const int    com_gameFrameLengthMS = 16; // length of one frame in msec, 1000 / com_gameHz
-const double  com_preciseFrameLengthMS = 1000.0 / 60.0;
+const double  com_preciseFrameLengthMS = 1000.0 / USERCMD_HZ;
 
 double com_preciseFrameTimeMS = 0; // like com_frameTime but as double: time (since start) for the current frame in milliseconds
 
@@ -2561,7 +2561,7 @@ void idCommonLocal::Frame( void ) {
 #endif
 		{
 			if ( com_timescale.GetFloat() == 1.0f && GLimp_GetSwapInterval() != 0
-				&& fabsf(60.0f - GLimp_GetDisplayRefresh()) < 1.0f ) {
+				&& fabsf(USERCMD_HZ - GLimp_GetDisplayRefresh()) < 1.0f ) {
 				// if we're using vsync and the display is running at about 60Hz, start next tic
 				// immediately so our internal tic time and vsync don't drift apart
 				double now = Sys_MillisecondsPrecise();
@@ -2875,7 +2875,7 @@ int idCommonLocal::AsyncThread(void* arg)
 		// TODO: Should this be synchronized with the main thread somehow?
 		//       Might make sense to run this when game tics are done, while main thread is rendering?
 		//       For now I'll assume that just doing this 60 times per second works well enough...
-		nextTicTargetMsec += com_preciseFrameLengthMS;
+		nextTicTargetMsec += 1000.0 / 60.0;
 		Sys_SleepUntilPrecise( nextTicTargetMsec );
 	}
 	return 0;

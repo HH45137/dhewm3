@@ -6036,7 +6036,7 @@ void idPlayer::SetCurrentHeartRate( void ) {
 		}
 	}
 
-	int bps = idMath::FtoiFast( 60.0f / heartRate * 1000.0f );
+	int bps = idMath::FtoiFast( USERCMD_HZ / heartRate * 1000.0f );
 	if ( gameLocal.time - lastHeartBeat > bps ) {
 		int dmgVol = DMG_VOLUME;
 		int deathVol = DEATH_VOLUME;
